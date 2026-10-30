@@ -1,168 +1,313 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MyApp());
+// Refactoring: Breakpoint didefinisikan satu kali sebagai konstanta bernama
+const double kWideBreakpoint = 700;
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+void main() => runApp(const DashboardApp());
+
+class DashboardApp extends StatefulWidget {
+  const DashboardApp({super.key});
+
+  @override
+  State<DashboardApp> createState() => _DashboardAppState();
+}
+
+class _DashboardAppState extends State<DashboardApp> {
+  bool isDark = false;
 
   @override
   Widget build(BuildContext context) {
-    // Praktikum 1 - Langkah 4: Implementasi title row
-    Widget titleSection = Container(
-      padding: const EdgeInsets.all(32),
-      child: Row(
-        children: [
-          Expanded(
-            /* soal 1 */
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                /* soal 2 */
-                Container(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: const Text(
-                    'Wisata Gunung di Batu',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                Text(
-                  'Batu, Malang, Indonesia',
-                  style: TextStyle(color: Colors.grey[500]),
-                ),
-              ],
-            ),
-          ),
-          /* soal 3 */
-          Icon(Icons.star, color: Colors.red[500]),
-          const Text('41'),
-        ],
-      ),
-    );
-
-    // Praktikum 2 - Langkah 2: Buat widget buttonSection
-    Color color = Theme.of(context).primaryColor;
-
-    Widget buttonSection = Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        _buildButtonColumn(color, Icons.call, 'CALL'),
-        _buildButtonColumn(color, Icons.near_me, 'ROUTE'),
-        _buildButtonColumn(color, Icons.share, 'SHARE'),
-      ],
-    );
-
-    // Praktikum 3 - Langkah 1: Buat widget textSection
-    Widget textSection = Container(
-      padding: const EdgeInsets.fromLTRB(32, 32, 32, 16),
-      child: const Text(
-        'Gunung Panderman adalah sebuah gunung di Kota Batu, Jawa Timur, '
-        'yang menjadi destinasi favorit bagi para pendaki pemula. '
-        'Berada di ketinggian 2.045 mdpl, puncak Basundara menyuguhkan '
-        'pemandangan indah Kota Batu dan Gunung Arjuno-Welirang dari '
-        'ketinggian.',
-        softWrap: true,
-        style: TextStyle(height: 1.5),
-      ),
-    );
-
-    // Footer Identitas Mahasiswa yang rapi & selaras dengan tema
-    Widget footerSection = Container(
-      margin: const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: Colors.deepPurple.shade50.withOpacity(0.6),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.deepPurple.shade100, width: 1.2),
-      ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 22,
-            backgroundColor: Colors.deepPurple.shade400,
-            child: const Icon(Icons.person, color: Colors.white, size: 26),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Ainul',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                    color: Colors.black87,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  'NIM: 23520010',
-                  style: TextStyle(fontSize: 13, color: Colors.grey[700]),
-                ),
-              ],
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: Colors.deepPurple.shade100.withOpacity(0.7),
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Text(
-              'Praktikum Flutter',
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w600,
-                color: Colors.deepPurple.shade800,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-
     return MaterialApp(
-      title: 'Flutter layout: Ainul - 23520010',
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Flutter layout demo')),
-        body: ListView(
-          children: [
-            Image.asset(
-              'assets/lake.jpg',
-              width: 600,
-              height: 240,
-              fit: BoxFit.cover,
-            ),
-            titleSection,
-            buttonSection,
-            textSection,
-            footerSection,
-            const SizedBox(height: 24),
-          ],
-        ),
+      title: 'Academic Overview - Ainul (23520010)',
+      debugShowCheckedModeBanner: false,
+      // Desain Tema Terang (Light Mode)
+      theme: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: Colors.indigo,
+        brightness: Brightness.light,
+        scaffoldBackgroundColor: const Color(0xFFF8F9FE),
+      ),
+      // Desain Tema Gelap (Dark Mode)
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: Colors.indigo,
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: const Color(0xFF111318),
+      ),
+      themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
+      home: DashboardPage(
+        isDark: isDark,
+        onDarkChanged: (value) => setState(() => isDark = value),
       ),
     );
   }
+}
 
-  // Praktikum 2 - Langkah 1: Buat method Column _buildButtonColumn
-  Column _buildButtonColumn(Color color, IconData icon, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: color),
-        Container(
-          margin: const EdgeInsets.only(top: 8),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: color,
-            ),
+class DashboardPage extends StatelessWidget {
+  const DashboardPage({
+    required this.isDark,
+    required this.onDarkChanged,
+    super.key,
+  });
+
+  final bool isDark;
+  final ValueChanged<bool> onDarkChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        scrolledUnderElevation: 2,
+        title: Text(
+          'Academic Overview',
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            letterSpacing: 0.3,
           ),
         ),
-      ],
+        actions: [
+          Row(
+            children: [
+              Icon(
+                isDark ? Icons.dark_mode_rounded : Icons.light_mode_rounded,
+                color: theme.colorScheme.primary,
+              ),
+              const SizedBox(width: 6),
+              Semantics(
+                label: 'Toggle tema gelap atau terang',
+                toggled: isDark,
+                child: CupertinoSwitch(
+                  activeTrackColor: theme.colorScheme.primary,
+                  value: isDark,
+                  onChanged: onDarkChanged,
+                ),
+              ),
+              const SizedBox(width: 16),
+            ],
+          ),
+        ],
+      ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isWide = constraints.maxWidth >= kWideBreakpoint;
+          final columns = isWide ? 2 : 1;
+
+          return ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+            children: [
+              // 1. Header Profil Mahasiswa (Container, Row, Column, Expanded)
+              Semantics(
+                label: 'Profil Mahasiswa Ainul, NIM 23520010, S1 Teknik Informatika',
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: isDark
+                          ? [
+                              theme.colorScheme.primaryContainer.withValues(alpha: 0.6),
+                              theme.colorScheme.surfaceContainerHighest,
+                            ]
+                          : [
+                              theme.colorScheme.primaryContainer,
+                              theme.colorScheme.secondaryContainer.withValues(alpha: 0.5),
+                            ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                      color: theme.colorScheme.outlineVariant.withValues(alpha: 0.5),
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: theme.shadowColor.withValues(alpha: 0.04),
+                        blurRadius: 16,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      // Avatar Mahasiswa
+                      Container(
+                        padding: const EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: theme.colorScheme.primary,
+                            width: 2.5,
+                          ),
+                        ),
+                        child: CircleAvatar(
+                          radius: 28,
+                          backgroundColor: theme.colorScheme.primary,
+                          child: Icon(
+                            Icons.person_rounded,
+                            color: theme.colorScheme.onPrimary,
+                            size: 32,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      // Teks Identitas Mahasiswa
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  'Ainul',
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: theme.colorScheme.onPrimaryContainer,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 3,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: theme.colorScheme.primary.withValues(alpha: 0.15),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    'Aktif',
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                      color: theme.colorScheme.primary,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              'NIM: 23520010 • S1 Teknik Informatika',
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                color: theme.colorScheme.onPrimaryContainer.withValues(alpha: 0.8),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 24),
+
+              // 2. Empat Kartu Informasi Responsif
+              GridView.count(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount: columns,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 2.8,
+                children: const [
+                  InfoCard(
+                    title: 'IPK Kumulatif',
+                    value: '3.88',
+                    icon: Icons.grade_rounded,
+                  ),
+                  InfoCard(
+                    title: 'SKS Tempuh',
+                    value: '84 SKS',
+                    icon: Icons.auto_stories_rounded,
+                  ),
+                  InfoCard(
+                    title: 'Kehadiran',
+                    value: '96%',
+                    icon: Icons.event_available_rounded,
+                  ),
+                  InfoCard(
+                    title: 'Tugas Selesai',
+                    value: '12 / 12',
+                    icon: Icons.task_alt_rounded,
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+// Refactoring: Kartu Reusable InfoCard (Styling Modern & Aksesibilitas)
+class InfoCard extends StatelessWidget {
+  const InfoCard({
+    required this.title,
+    required this.value,
+    required this.icon,
+    super.key,
+  });
+
+  final String title;
+  final String value;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Semantics(
+      label: 'Informasi $title adalah $value',
+      child: Card(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(
+            color: theme.colorScheme.outlineVariant.withValues(alpha: 0.4),
+          ),
+        ),
+        color: theme.colorScheme.surfaceContainerLow,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(
+                  icon,
+                  color: theme.colorScheme.primary,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  title,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
+              Text(
+                value,
+                style: theme.textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: theme.colorScheme.primary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

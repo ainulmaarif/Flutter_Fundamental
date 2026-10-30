@@ -21,4 +21,5 @@ flutter:
 
   # Perhatikan spasinya di sini, ini yang paling penting
   assets:
-    - assets/lake.jpg
+    - assets/logo.jpeg
+    - assets/fotosaya.jpeg
