@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Laporan Praktikum Pemrograman Piranti Bergerak - Navigasi dan Rute</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+    @page {
+      size: A4;
+      margin: 18mm 16mm 18mm 16mm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-size: 10.5pt;
+      line-height: 1.6;
+      color: #1e293b;
+      background-color: #ffffff;
+      margin: 0;
+      padding: 0;
+    }
+
+    .page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    /* Cover Page */
+    .cover-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 90vh;
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    .cover-header {
+      margin-top: 10px;
+    }
+
+    .cover-instansi {
+      font-size: 13pt;
+      font-weight: 700;
+      color: #1e1b4b;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 4px;
+    }
+
+    .cover-prodi {
+      font-size: 11pt;
+      font-weight: 600;
+      color: #4338ca;
+      letter-spacing: 1px;
+    }
+
+    .cover-logo-wrapper {
+      margin: 35px auto;
+      width: 130px;
+      height: 130px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e0e7ff 0%, #ede9fe 100%);
+      padding: 10px;
+      box-shadow: 0 4px 15px rgba(67, 56, 202, 0.15);
+    }
+
+    .cover-logo {
+      max-width: 100px;
+      max-height: 100px;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    .cover-title-box {
+      margin: 20px 0;
+      padding: 24px 20px;
+      background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 100%);
+      border-top: 4px solid #3730a3;
+      border-bottom: 4px solid #3730a3;
+      border-radius: 8px;
+    }
+
+    .cover-main-title {
+      font-size: 18pt;
+      font-weight: 800;
+      color: #1e1b4b;
+      line-height: 1.3;
+      margin: 0 0 10px 0;
+      text-transform: uppercase;
+    }
+
+    .cover-sub-title {
+      font-size: 12pt;
+      font-weight: 600;
+      color: #4338ca;
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .cover-topic-badge {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 6px 16px;
+      background-color: #3730a3;
+      color: #ffffff;
+      font-size: 9.5pt;
+      font-weight: 600;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .cover-meta-box {
+      margin: 30px auto;
+      width: 85%;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 18px 24px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      text-align: left;
+    }
+
+    .meta-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .meta-table td {
+      padding: 6px 4px;
+      font-size: 10.5pt;
+      vertical-align: top;
+    }
+
+    .meta-label {
+      width: 32%;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .meta-sep {
+      width: 4%;
+      text-align: center;
+      color: #64748b;
+    }
+
+    .meta-value {
+      width: 64%;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .cover-footer {
+      margin-bottom: 10px;
+      font-size: 10.5pt;
+      font-weight: 600;
+      color: #64748b;
+    }
+
+    /* Headings */
+    h1 {
+      font-size: 15pt;
+      font-weight: 800;
+      color: #1e1b4b;
+      border-bottom: 2.5px solid #3730a3;
+      padding-bottom: 6px;
+      margin-top: 24px;
+      margin-bottom: 14px;
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+
+    h2 {
+      font-size: 12.5pt;
+      font-weight: 700;
+      color: #312e81;
+      margin-top: 18px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+
+    h3 {
+      font-size: 11pt;
+      font-weight: 700;
+      color: #4338ca;
+      margin-top: 14px;
+      margin-bottom: 8px;
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 10px 0;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 0 0 12px 0;
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    /* Tables */
+    table.content-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 18px 0;
+      font-size: 9.5pt;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    table.content-table th {
+      background-color: #1e1b4b;
+      color: #ffffff;
+      font-weight: 600;
+      text-align: left;
+      padding: 9px 10px;
+      border: 1px solid #1e1b4b;
+    }
+
+    table.content-table td {
+      padding: 8px 10px;
+      border: 1px solid #cbd5e1;
+      vertical-align: top;
+    }
+
+    table.content-table tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    /* Code Blocks */
+    pre {
+      background-color: #0f172a;
+      color: #f1f5f9;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 8.5pt;
+      padding: 12px 14px;
+      border-radius: 8px;
+      overflow-x: auto;
+      line-height: 1.45;
+      margin: 10px 0 16px 0;
+      border: 1px solid #334155;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', Consolas, monospace;
+      font-size: 9pt;
+      background-color: #eef2ff;
+      color: #3730a3;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    pre code {
+      background-color: transparent;
+      color: inherit;
+      padding: 0;
+      border-radius: 0;
+    }
+
+    /* Callout & Cards */
+    .callout {
+      background-color: #f0fdf4;
+      border-left: 4px solid #16a34a;
+      padding: 10px 14px;
+      margin: 12px 0 16px 0;
+      border-radius: 0 8px 8px 0;
+      font-size: 9.5pt;
+      page-break-inside: avoid;
+    }
+
+    .callout.info {
+      background-color: #eff6ff;
+      border-left-color: #2563eb;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      margin-bottom: 4px;
+      color: #1e293b;
+    }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 12px 0;
+      page-break-inside: avoid;
+    }
+
+    .spec-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .spec-card-title {
+      font-weight: 700;
+      font-size: 10pt;
+      color: #3730a3;
+      margin-bottom: 4px;
+    }
+
+    .header-rule {
+      height: 1px;
+      background: #e2e8f0;
+      margin: 18px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- COVER LAPORAN -->
+  <div class="cover-container">
+    <div class="cover-header">
+      <div class="cover-instansi">Program Studi S1 Teknik Informatika</div>
+      <div class="cover-prodi">Fakultas Ilmu Komputer • Pemrograman Piranti Bergerak</div>
+    </div>
+
+    <div class="cover-logo-wrapper">
+      <img src="assets/logo.jpeg" alt="Logo Kampus" class="cover-logo" onerror="this.style.display='none'" />
+    </div>
+
+    <div class="cover-title-box">
+      <div class="cover-main-title">Laporan Praktikum Pemrograman Piranti Bergerak</div>
+      <div class="cover-sub-title">Tugas Praktikum 5: Navigasi dan Rute di Flutter<br>(Studi Kasus Platform Rental Mobil Malang &amp; Routing Deklaratif GoRouter)</div>
+      <div class="cover-topic-badge">Flutter 3 • Navigator 1.0 • Named Routes • ModalRoute • Hero Animation • GoRouter</div>
+    </div>
+
+    <div class="cover-meta-box">
+      <table class="meta-table">
+        <tr>
+          <td class="meta-label">Nama Mahasiswa</td>
+          <td class="meta-sep">:</td>
+          <td class="meta-value">Ainul</td>
+        </tr>
+        <tr>
+          <td class="meta-label">NIM</td>
+          <td class="meta-sep">:</td>
+          <td class="meta-value">23520010</td>
+        </tr>
+        <tr>
+          <td class="meta-label">Mata Kuliah</td>
+          <td class="meta-sep">:</td>
+          <td class="meta-value">Pemrograman Piranti Bergerak</td>
+        </tr>
+        <tr>
+          <td class="meta-label">Dosen Pengampu</td>
+          <td class="meta-sep">:</td>
+          <td class="meta-value">Dosen Pengampu Mata Kuliah Praktikum</td>
+        </tr>
+        <tr>
+          <td class="meta-label">Tanggal Pelaksanaan</td>
+          <td class="meta-sep">:</td>
+          <td class="meta-value">Semester Ganjil 2026/2027</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="cover-footer">
+      Malang, Jawa Timur — 2026
+    </div>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- BAB I: TUJUAN PRAKTIKUM -->
+  <h1>BAB I: TUJUAN PRAKTIKUM</h1>
+  
+  <p>Tugas Praktikum 5 berfokus pada penguasaan navigasi antar layar, manajemen alur data, perancangan tata letak grid dua dimensi responsif, serta animasi transisi visual pada framework Flutter. Adapun tujuan khusus dari praktikum ini adalah:</p>
+
+  <ol>
+    <li><strong>Menerapkan Tata Letak Grid Responsif:</strong> Membangun katalog item menggunakan widget <code>GridView.builder</code> dengan 2 kolom (<code>crossAxisCount: 2</code>) dan rasio aspek yang seimbang sehingga bebas dari kendala <em>RenderFlex overflow</em> pada beragam ukuran layar gawai.</li>
+    <li><strong>Menguasai Navigasi Tumpukan Berbasis Rute Bernama (Named Routes):</strong> Mengonfigurasi tabel rute terpusat pada <code>MaterialApp</code> menggunakan <code>initialRoute</code> dan map <code>routes</code> untuk menghubungkan rute beranda (<code>'/'</code>) dan rute detail (<code>'/item'</code>).</li>
+    <li><strong>Mengimplementasikan Pengiriman Data Berorientasi Objek:</strong> Mengirimkan objek model data <code>Item</code> yang kompleks secara langsung antar halaman menggunakan parameter <code>arguments</code> pada pemanggilan metode <code>Navigator.pushNamed(context, '/item', arguments: item)</code>.</li>
+    <li><strong>Mengekstrak Objek Rute pada Layar Penerima:</strong> Mengambil dan melakukan <em>type casting</em> terhadap data argumen yang diterima di halaman tujuan secara aman melalui perintah <code>ModalRoute.of(context)!.settings.arguments as Item</code>.</li>
+    <li><strong>Menerapkan Transisi Visual Halus dengan Widget Hero:</strong> Mengimplementasikan <em>shared element transition</em> antar layar melalui widget <code>Hero</code> dengan tag pengidentifikasi unik (<code>item.name</code>) guna meningkatkan pengalaman visual pengguna (UX).</li>
+    <li><strong>Membangun Arsitektur Widget Modular &amp; Reusable:</strong> Mengembangkan komponen modular yang dapat digunakan kembali, yaitu <code>CarCard</code> sebagai kartu katalog dan <code>FooterWidget</code> sebagai identitas resmi mahasiswa (<em>"Ainul - 23520010 • Rental Mobil Malang"</em>).</li>
+    <li><strong>Memahami dan Membandingkan Perutean Deklaratif GoRouter:</strong> Mengimplementasikan rute berbasis URL pada package <code>go_router</code> dengan hierarki sub-rute berparameter (<code>detail/:id</code>), membaca parameter URL melalui <code>state.pathParameters</code>, dan melakukan navigasi deklaratif menggunakan <code>context.go()</code>.</li>
+  </ol>
+
+  <div class="callout info">
+    <div class="callout-title">💡 Capaian Kompetensi</div>
+    Mahasiswa mampu mendemonstrasikan pemahaman menyeluruh terhadap arsitektur navigasi Flutter, baik model tumpukan imperatif (Navigator 1.0) yang cocok untuk mobile murni, maupun model router deklaratif (GoRouter) yang mendukung deep linking dan Flutter Web.
+  </div>
+
+  <!-- BAB II: DASAR TEORI -->
+  <h1>BAB II: DASAR TEORI</h1>
+
+  <h2>2.1 Konsep Navigasi dan Tumpukan Rute (Navigator 1.0)</h2>
+  <p>Dalam framework Flutter, navigasi antar halaman secara fundamental dimodelkan sebagai sebuah struktur data tumpukan (<em>Stack</em>) LIFO (<em>Last-In, First-Out</em>) yang dikelola oleh widget <code>Navigator</code>. Layar yang saat ini sedang aktif dan tampak oleh pengguna berada pada posisi puncak tumpukan (<em>top of stack</em>).</p>
+  <ul>
+    <li><code>Navigator.push()</code>: Menambahkan rute baru ke puncak tumpukan, menyebabkan layar baru ditampilkan menutupi layar sebelumnya.</li>
+    <li><code>Navigator.pop()</code>: Menghapus rute paling atas dari tumpukan, sehingga aplikasi kembali menampilkan layar yang berada tepat di bawahnya.</li>
+    <li><code>Navigator.pushNamed()</code>: Menambahkan rute baru berdasarkan string nama (*route name*) yang telah dipetakan sebelumnya di dalam properti <code>routes</code> pada root <code>MaterialApp</code>.</li>
+  </ul>
+
+  <h2>2.2 Perbandingan Mendalam: Navigator 1.0 vs GoRouter Deklaratif</h2>
+  <p>Flutter menyediakan dua pendekatan utama dalam perutean halaman, yakni model imperatif klasik (Navigator 1.0) dan model deklaratif modern (Router API / GoRouter). Perbedaan esensial kedua pendekatan ini diuraikan pada tabel berikut:</p>
+
+  <table class="content-table">
+    <thead>
+      <tr>
+        <th style="width: 22%;">Parameter Evaluasi</th>
+        <th style="width: 39%;">Navigator 1.0 (Imperatif)</th>
+        <th style="width: 39%;">GoRouter (Deklaratif)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Paradigma Arsitektur</strong></td>
+        <td><strong>Imperatif:</strong> Pengembang menginstruksikan sistem langkah-demi-langkah kapan harus mendorong (<em>push</em>) atau melepas (<em>pop</em>) layar dari stack memori.</td>
+        <td><strong>Deklaratif:</strong> Layar aplikasi diproyeksikan secara otomatis berdasarkan *state* URL saat ini. Tumpukan halaman disinkronkan oleh router engine.</td>
+      </tr>
+      <tr>
+        <td><strong>Passing Objek Data</strong></td>
+        <td>Sangat mudah dan langsung via properti <code>arguments: Object?</code>. Seluruh referensi objek di memori dapat langsung dikirimkan tanpa serialisasi string.</td>
+        <td>Menggunakan <code>pathParameters</code> (misal: <code>/detail/:id</code>), <code>queryParameters</code>, dan properti <code>extra</code> untuk objek in-memory.</td>
+      </tr>
+      <tr>
+        <td><strong>Dukungan Web &amp; Deep Linking</strong></td>
+        <td><strong>Terbatas:</strong> URL pada peramban web tidak selalu sinkron dengan kondisi tumpukan. Refresh halaman web sering kali menyebabkan hilangnya objek argumen (<em>null pointer</em>).</td>
+        <td><strong>Istimewa (First-Class):</strong> URL web selalu tersinkronisasi dua arah. Mendukung entri URL langsung, riwayat tombol Back/Forward browser, dan Android App Links.</td>
+      </tr>
+      <tr>
+        <td><strong>Route Guards / Autentikasi</strong></td>
+        <td>Logika pemeriksaan login harus ditulis berulang kali pada setiap pemanggilan <code>push</code> atau memerlukan konfigurasi manual di <code>onGenerateRoute</code>.</td>
+        <td><strong>Terpusat:</strong> Mendukung fungsi <code>redirect: (context, state)</code> yang secara otomatis mengalihkan navigasi ke rute login jika token kedaluwarsa.</td>
+      </tr>
+      <tr>
+        <td><strong>Nested / Shell Routing</strong></td>
+        <td>Memerlukan hierarki <code>Navigator</code> ganda bersarang dengan <code>GlobalKey</code> terpisah yang rentan terhadap kebocoran memori.</td>
+        <td>Sangat bersih melalui widget <code>ShellRoute</code> atau <code>StatefulShellRoute</code>, memudahkan implementasi Bottom Navigation Bar persisten.</td>
+      </tr>
+      <tr>
+        <td><strong>Kompleksitas Kode</strong></td>
+        <td>Sangat sederhana, tidak memerlukan dependensi eksternal, cocok untuk aplikasi skala kecil hingga menengah.</td>
+        <td>Memerlukan konfigurasi paket <code>go_router</code>, penanganan parser URL, serta pemahaman paradigma routing modern.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2.3 Mekanisme Hero Animation</h2>
+  <p>Widget <code>Hero</code> di Flutter mengimplementasikan konsep *shared element transition*, di mana elemen visual yang sama (seperti foto produk mobil) tampak bergerak dan bertransformasi secara mulus dari posisi awal di layar asal ke posisi baru di layar tujuan. Ketika transisi rute terjadi:</p>
+  <ol>
+    <li>Flutter mendeteksi adanya dua widget <code>Hero</code> pada dua rute berbeda yang memiliki nilai <code>tag</code> identik (dalam kasus ini: <code>item.name</code>).</li>
+    <li>Widget dilepas sementara dari pohon widget normal dan dipindahkan ke lapisan <em>Overlay</em> global.</li>
+    <li>Sistem menghitung interpolasi posisi persegi panjang (<code>RectTween</code>) dari ukuran dan koordinat awal di grid menuju ukuran dan koordinat header layar detail.</li>
+    <li>Setelah animasi selesai, widget ditempatkan secara permanen pada pohon widget rute tujuan.</li>
+  </ol>
+
+  <h2>2.4 Sistem Rute Bernama (Named Routes)</h2>
+  <p>Sistem Named Routes mengabstraksi pembuatan rute fisik dari logika bisnis halaman. Struktur rute didefinisikan secara terpusat pada file <code>lib/main.dart</code> menggunakan map <code>routes: &lt;String, WidgetBuilder&gt;{}</code>:</p>
+  <pre><code>MaterialApp(
+  initialRoute: '/',
+  routes: {
+    '/': (context) => const HomePage(),
+    '/item': (context) => const ItemPage(),
+  },
+)</code></pre>
+
+  <div class="page-break"></div>
+
+  <!-- BAB III: PEMBAHASAN IMPLEMENTASI KODE PLATFORM SEWA MOBIL -->
+  <h1>BAB III: PEMBAHASAN IMPLEMENTASI KODE PLATFORM SEWA MOBIL</h1>
+
+  <p>Platform rental mobil dikembangkan dengan mematuhi prinsip arsitektur modular, pemisahan tanggung jawab (*Separation of Concerns*), serta antarmuka modern berstandar Material 3 dengan warna aksen Indigo.</p>
+
+  <h2>3.1 Model Data Item (lib/models/item.dart)</h2>
+  <p>Model data <code>Item</code> dirancang sebagai cetak biru entitas kendaraan sewa dengan atribut lengkap yang mencerminkan kebutuhan operasional bisnis rental mobil di Kota Malang.</p>
+
+  <pre><code>class Item {
+  final String name;          // Nama resmi kendaraan
+  final int price;            // Tarif sewa harian (Rupiah/24 Jam)
+  final String photo;          // URL gambar mobil asli
+  final int stock;            // Ketersediaan unit mobil di pool
+  final double rating;        // Rating kepuasan penyewa (skala 1-5)
+  final String transmission;  // Transmisi: Matic / Manual
+  final int capacity;         // Kapasitas tempat duduk (kursi)
+  final String fuel;          // Tipe bahan bakar (Bensin / Hybrid / Diesel)
+  final String description;   // Ringkasan spesifikasi & peruntukan armada
+
+  Item({
+    required this.name,
+    required this.price,
+    required this.photo,
+    required this.stock,
+    required this.rating,
+    required this.transmission,
+    required this.capacity,
+    this.fuel = 'Bensin',
+    this.description = '',
+  });
+}</code></pre>
+
+  <p>Sebanyak tepat 6 unit mobil populer disediakan pada katalog dengan foto asli yang akurat dari repositori Wikimedia Commons:</p>
+
+  <table class="content-table">
+    <thead>
+      <tr>
+        <th style="width: 5%;">No</th>
+        <th style="width: 25%;">Nama Kendaraan</th>
+        <th style="width: 17%;">Tarif Sewa</th>
+        <th style="width: 13%;">Transmisi</th>
+        <th style="width: 10%;">Kursi</th>
+        <th style="width: 10%;">Stok</th>
+        <th style="width: 10%;">Rating</th>
+        <th style="width: 10%;">BBM</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>Toyota Avanza 1.5 G</strong></td>
+        <td>Rp 350.000 / hari</td>
+        <td>Matic</td>
+        <td>7 Kursi</td>
+        <td>5 Unit</td>
+        <td>⭐ 4.8</td>
+        <td>Bensin</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>Mitsubishi Xpander Ultimate</strong></td>
+        <td>Rp 400.000 / hari</td>
+        <td>Matic</td>
+        <td>7 Kursi</td>
+        <td>4 Unit</td>
+        <td>⭐ 4.9</td>
+        <td>Bensin</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>Toyota Innova Zenix Hybrid</strong></td>
+        <td>Rp 700.000 / hari</td>
+        <td>Matic</td>
+        <td>7 Kursi</td>
+        <td>3 Unit</td>
+        <td>⭐ 5.0</td>
+        <td>Hybrid</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><strong>Honda Brio RS</strong></td>
+        <td>Rp 275.000 / hari</td>
+        <td>Manual</td>
+        <td>5 Kursi</td>
+        <td>6 Unit</td>
+        <td>⭐ 4.7</td>
+        <td>Bensin</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><strong>Toyota Fortuner VRZ 4x4</strong></td>
+        <td>Rp 1.100.000 / hari</td>
+        <td>Matic</td>
+        <td>7 Kursi</td>
+        <td>2 Unit</td>
+        <td>⭐ 4.9</td>
+        <td>Diesel</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><strong>Toyota HiAce Commuter</strong></td>
+        <td>Rp 1.250.000 / hari</td>
+        <td>Manual</td>
+        <td>12 Kursi</td>
+        <td>2 Unit</td>
+        <td>⭐ 5.0</td>
+        <td>Diesel</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>3.2 Arsitektur Modular Komponen Reusable (lib/widgets/)</h2>
+  
+  <h3>A. Footer Identitas Mahasiswa (lib/widgets/footer_widget.dart)</h3>
+  <p>Komponen ini menampilkan identitas resmi mahasiswa secara elegan pada bagian bawah layar aplikasi, dibungkus dalam <code>SafeArea</code> dengan warna tema <code>surfaceContainerHighest</code>:</p>
+
+  <pre><code>import 'package:flutter/material.dart';
+
+class FooterWidget extends StatelessWidget {
+  const FooterWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withAlpha(120),
+        border: Border(
+          top: BorderSide(
+            color: theme.colorScheme.outlineVariant.withAlpha(80),
+            width: 1,
+          ),
+        ),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.directions_car_rounded, size: 18, color: theme.colorScheme.primary),
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text(
+                'Ainul - 23520010 • Rental Mobil Malang',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: theme.colorScheme.onSurfaceVariant,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}</code></pre>
+
+  <h3>B. Kartu Produk Mobil Katalog (lib/widgets/car_card.dart)</h3>
+  <p>Komponen <code>CarCard</code> bertindak sebagai item grid interaktif. Foto mobil dibungkus dengan widget <code>Hero(tag: item.name)</code> untuk mengaktifkan animasi transisi. Selain itu, kartu dilengkapi logika formatting harga Rupiah murni, badge transmisi, rating bintang, dan ketersediaan stok:</p>
+
+  <pre><code>// Potongan implementasi Hero dan Gambar pada CarCard
+Hero(
+  tag: item.name,
+  child: ClipRRect(
+    borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+    child: Image.network(
+      item.photo,
+      height: 120,
+      width: double.infinity,
+      fit: BoxFit.cover,
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) return child;
+        return const Center(child: CircularProgressIndicator(strokeWidth: 2));
+      },
+      errorBuilder: (context, error, stackTrace) {
+        return Container(
+          height: 120,
+          color: theme.colorScheme.primaryContainer.withAlpha(70),
+          child: const Icon(Icons.directions_car_filled_outlined, size: 48),
+        );
+      },
+    ),
+  ),
+)</code></pre>
+
+  <h2>3.3 Halaman Utama Katalog (lib/pages/home_page.dart)</h2>
+  <p>Halaman beranda memanfaatkan <code>GridView.builder</code> untuk merender katalog 2 kolom secara hemat memori (<em>lazy virtualization</em>). Ketika salah satu kartu diklik, sistem memicu navigasi:</p>
+
+  <pre><code>// Pengiriman objek data mobil utuh melalui parameter arguments
+Navigator.pushNamed(
+  context,
+  '/item',
+  arguments: car,
+);</code></pre>
+
+  <p>Konfigurasi GridView menggunakan <code>SliverGridDelegateWithFixedCrossAxisCount</code> dengan <code>crossAxisCount: 2</code> dan <code>childAspectRatio: 0.70</code> menjamin kartu produk tampil proporsional tanpa risiko <em>overflow pixel</em>.</p>
+
+  <h2>3.4 Halaman Rincian Armada (lib/pages/item_page.dart)</h2>
+  <p>Pada halaman detail, data objek yang dikirim melalui <code>arguments</code> diekstrak secara deklaratif pada awal fungsi <code>build()</code>:</p>
+
+  <pre><code>@override
+Widget build(BuildContext context) {
+  // Ekstraksi data yang dikirim melalui Navigator.pushNamed arguments
+  final item = ModalRoute.of(context)!.settings.arguments as Item;
+  final theme = Theme.of(context);
+  ...
+}</code></pre>
+
+  <p>Pasangan widget <code>Hero(tag: item.name)</code> disematkan pada gambar header layar detail berukuran tinggi 250px. Ketika pengguna berpindah dari beranda ke halaman ini, Flutter secara otomatis menganimasikan perbesaran gambar mobil secara mulus. Halaman ini juga menyajikan spesifikasi kendaraan (kursi, transmisi, BBM, stok), fasilitas rental, tombol interaktif <strong>'Sewa Sekarang'</strong> dengan dialog konfirmasi, serta <code>FooterWidget</code> di bagian bawah.</p>
+
+  <h2>3.5 Konfigurasi Terpusat di lib/main.dart</h2>
+  <p>Konfigurasi routing Navigator 1.0 didaftarkan secara terpusat pada root widget <code>MyApp</code> dengan tema Material 3 berwarna dasar Indigo:</p>
+
+  <pre><code>class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Rental Mobil Malang - Ainul (23520010)',
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const HomePage(),
+        '/item': (context) => const ItemPage(),
+      },
+      theme: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: Colors.indigo,
+      ),
+    );
+  }
+}</code></pre>
+
+  <div class="page-break"></div>
+
+  <!-- BAB IV: PEMBAHASAN PRAKTIKUM 2 (GOROUTER DEKLARATIF) -->
+  <h1>BAB IV: PEMBAHASAN PRAKTIKUM 2 (GOROUTER DEKLARATIF)</h1>
+
+  <p>Pada bagian kedua praktikum, dilakukan eksplorasi terhadap package <code>go_router</code> untuk menguji kapabilitas perutean berbasis URL yang sangat krusial bagi aplikasi modern, terutama saat dijalankan pada lingkungan Flutter Web.</p>
+
+  <h2>4.1 Konfigurasi Hierarki Sub-Routes Berparameter</h2>
+  <p>Berbeda dengan rute flat Navigator 1.0, <code>GoRouter</code> memungkinkan penyusunan rute bersarang (*nested sub-routes*) di mana rute anak secara alami mewarisi konteks URL rute induknya:</p>
+
+  <pre><code>final _router = GoRouter(
+  initialLocation: '/',
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => const HomePage(),
+      routes: [
+        GoRoute(
+          path: 'detail/:id',
+          builder: (context, state) => DetailPage(
+            id: state.pathParameters['id']!,
+          ),
+        ),
+      ],
+    ),
+  ],
+);</code></pre>
+
+  <h2>4.2 Navigasi Deklaratif dengan context.go()</h2>
+  <p>Untuk berpindah ke halaman detail dengan ID dinamis, navigasi dilakukan menggunakan ekstensi metode <code>context.go()</code>:</p>
+
+  <pre><code>ListTile(
+  title: Text('Item ${index + 1}'),
+  onTap: () => context.go('/detail/${index + 1}'),
+)</code></pre>
+
+  <p>Ketika metode <code>context.go('/detail/3')</code> dieksekusi, GoRouter memetakan URL tersebut ke sub-rute <code>detail/:id</code>, mengekstrak nilai string <code>"3"</code> ke dalam koleksi <code>state.pathParameters['id']</code>, lalu menyuntikkannya ke konstruktor <code>DetailPage(id: '3')</code>.</p>
+
+  <h2>4.3 Keunggulan Arsitektur GoRouter</h2>
+  <ol>
+    <li><strong>Sinkronisasi URL Browser:</strong> Pada Flutter Web, URL di bilah alamat browser otomatis berubah menjadi <code>http://localhost:port/#/detail/3</code>. Pengguna dapat menyalin (*copy-paste*) tautan ini atau membagikannya ke pihak lain, dan sistem akan langsung membuka halaman detail yang bersangkutan.</li>
+    <li><strong>Dukungan Tombol History Browser:</strong> Tombol Back dan Forward fisik pada peramban web berfungsi sempurna tanpa perlu konfigurasi tambahan.</li>
+    <li><strong>Pencegahan Kehilangan Data (State Preservation):</strong> Karena identifier tersimpan di URL, aksi me-refresh browser (*Ctrl + R*) tidak akan menyebabkan aplikasi crash atau kehilangan data objek seperti yang kerap dialami Navigator 1.0.</li>
+  </ol>
+
+  <!-- BAB V: KESIMPULAN -->
+  <h1>BAB V: KESIMPULAN</h1>
+
+  <p>Berdasarkan serangkaian implementasi dan pengujian yang telah dilaksanakan pada Tugas Praktikum 5, dapat ditarik beberapa kesimpulan penting sebagai berikut:</p>
+
+  <ol>
+    <li><strong>Efektivitas GridView.builder:</strong> Penggunaan <code>GridView.builder</code> dengan 2 kolom dan rasio aspek 0.70 terbukti efisien dan andal dalam menyajikan katalog armada kendaraan secara responsif, estetik, dan hemat konsumsi memori gawai.</li>
+    <li><strong>Fleksibilitas Passing Objek Navigator 1.0:</strong> Properti <code>arguments</code> pada <code>Navigator.pushNamed</code> dan pembacaan melalui <code>ModalRoute.of(context)!.settings.arguments</code> merupakan solusi paling praktis dan elegan untuk mentransfer objek kompleks (kelas <code>Item</code> dengan 9 atribut) dalam aplikasi mobile murni tanpa proses serialisasi JSON.</li>
+    <li><strong>Peningkatan Kualitas UX melalui Hero Animation:</strong> Transisi visual <code>Hero</code> dengan tag pengidentifikasi unik secara signifikan meningkatkan kesan profesional dan kehalusan antarmuka aplikasi saat berpindah dari katalog ke halaman detail mobil.</li>
+    <li><strong>Modularitas Reusable Widgets:</strong> Pemisahan komponen ke dalam berkas <code>car_card.dart</code> dan <code>footer_widget.dart</code> mematuhi standar *clean code*, mencegah duplikasi logika UI, dan memudahkan pemeliharaan kode jangka panjang.</li>
+    <li><strong>Sinergi Navigator 1.0 dan GoRouter:</strong> Navigator 1.0 sangat unggul dalam kesederhanaan implementasi untuk aplikasi mobile Android/iOS, sedangkan GoRouter merupakan standar mutlak ketika aplikasi memerlukan kemampuan *cross-platform* (khususnya Flutter Web), *deep linking*, dan *centralized route guards*.</li>
+  </ol>
+
+  <div class="header-rule"></div>
+
+  <div style="text-align: center; font-size: 9.5pt; color: #64748b; margin-top: 15px;">
+    Dokumen Laporan Praktikum Resmi — Pemrograman Piranti Bergerak — Ainul (23520010)
+  </div>
+
+</body>
+</html>
