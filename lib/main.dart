@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'pages/home_page.dart';
-import 'pages/item_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'pages/todo_page.dart';
 
 void main() {
-  runApp(const MyApp());
+  // ProviderScope membungkus root widget aplikasi
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -12,17 +17,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Rental Mobil Malang - Ainul (23520010)',
+      title: 'Week 3 - ToDo Riverpod',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const HomePage(),
-        '/item': (context) => const ItemPage(),
-      },
       theme: ThemeData(
+        colorSchemeSeed: Colors.teal,
         useMaterial3: true,
-        colorSchemeSeed: Colors.indigo,
       ),
+      home: const TodoPage(),
     );
   }
 }
