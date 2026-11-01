@@ -1,40 +1,44 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hello_world/main.dart';
 
 void main() {
-  testWidgets('Rental Mobil Malang App loads and navigates correctly',
+  testWidgets('ProductPage menampilkan state loading dan berhasil menampilkan produk',
       (WidgetTester tester) async {
-    // Jalankan aplikasi
-    await tester.pumpWidget(const MyApp());
-    await tester.pumpAndSettle();
-
-    // Verifikasi keberadaan judul AppBar dan Footer identitas mahasiswa
-    expect(find.text('Rental Mobil Malang'), findsWidgets);
-    expect(
-      find.text('Ainul - 23520010 • Rental Mobil Malang'),
-      findsOneWidget,
+    await tester.pumpWidget(
+      const ProviderScope(
+        child: MyApp(),
+      ),
     );
 
-    // Verifikasi data mobil pertama tampil di katalog
-    expect(find.text('Toyota Avanza 1.5 G'), findsOneWidget);
+    // Verifikasi judul AppBar identitas mahasiswa
+    expect(find.text('Katalog Produk - Ainul (23520010)'), findsOneWidget);
 
-    // Klik kartu mobil untuk navigasi ke ItemPage dengan arguments
-    await tester.tap(find.text('Toyota Avanza 1.5 G'));
+    // Verifikasi kondisi Loading awal (2 detik)
+    expect(find.text('Memuat data... (2 detik)'), findsOneWidget);
+
+    // Tunggu simulasi loading selama 2 detik selesai
+    await tester.pump(const Duration(seconds: 2));
     await tester.pumpAndSettle();
 
-    // Verifikasi halaman detail terbuka dengan rincian dan tombol 'Sewa Sekarang'
-    expect(find.text('Toyota Avanza 1.5 G'), findsWidgets);
-    expect(find.text('Sewa Sekarang'), findsOneWidget);
-    expect(find.text('Spesifikasi Kendaraan'), findsOneWidget);
-    expect(
-      find.text('Ainul - 23520010 • Rental Mobil Malang'),
-      findsOneWidget,
-    );
+    // Verifikasi ketiga produk tampil di layar (Success state awal)
+    expect(find.text('Keyboard'), findsOneWidget);
+    expect(find.text('Mouse'), findsOneWidget);
+    expect(find.text('Monitor'), findsOneWidget);
 
-    // Verifikasi tombol kembali ke halaman utama
-    await tester.pageBack();
+    // Tap tombol refresh untuk memuat 4 item (termasuk Headset)
+    await tester.tap(find.byIcon(Icons.refresh));
+    await tester.pump();
+    await tester.pump(const Duration(seconds: 1));
     await tester.pumpAndSettle();
 
-    expect(find.text('Katalog Armada Pilihan'), findsOneWidget);
+    // Verifikasi item ke-4 (Headset) muncul
+    expect(find.text('Headset'), findsOneWidget);
+
+    // Tap item untuk memverifikasi fungsionalitas interaksi
+    await tester.tap(find.text('Headset'));
+    await tester.pump();
+    expect(find.text('Item Headset dipilih dan berfungsi dengan baik'), findsOneWidget);
   });
 }
